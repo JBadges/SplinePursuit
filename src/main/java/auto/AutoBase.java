@@ -1,0 +1,63 @@
+package auto;
+
+import auto.actions.Action;
+
+/**
+ * AutoBase
+ */
+public abstract class AutoBase {
+    protected double updateRate = 1.0 / 50.0;
+    protected boolean active = false;
+
+    protected abstract void routine() throws AutoModeEndedException;
+
+    public void run() {
+        active = true;
+
+        try {
+            routine();
+        } catch (AutoModeEndedException e) {
+            return;
+        }
+
+        done();
+    }
+
+    public void done() {
+
+    }
+
+    public void stop() {
+        active = false;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean isActiveWithThrow() throws AutoModeEndedException {
+        if (!isActive()) {
+            throw new AutoModeEndedException();
+        }
+
+        return isActive();
+    }
+
+    public void runAction(Action action) throws AutoModeEndedException {
+        action.start();
+
+        while (isActive() && !action.isFinished()) {
+            action.update();
+            long waitTime = (long) (updateRate * 1000.0);
+
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        action.done();
+    }
+
+}
