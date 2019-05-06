@@ -15,7 +15,6 @@ import util.spline.Spline;
 import java.io.File;
 import java.util.List;
 
-
 /**
  * Created by jacks on 2019-05-04.
  */
@@ -34,16 +33,15 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         SplineDrivePath.pane = new Pane();
         List<Spline> splines = new Path(new Point(0, 0, Math.PI/2),
-                new Point(0, 1, Math.PI/2),
-                new Point(1, 2, 0),
-                new Point(3, 2, 0),
-                new Point(4,3, Math.PI/2),
-                new Point(1, 4, -Math.PI),
-                new Point(2.5,3, 0)).getPath();
+                new Point(0, 4, Math.PI/2),
+                new Point(1, 5, 0),
+                new Point(6, 5, 0),
+                new Point(7,6, Math.PI/2),
+                new Point(6, 7, Math.PI)).getPath();
 
         for(double t = 0; t < splines.size(); t += 0.01) {
             Point p = splines.get((int) t).getPoint(t % 1);
-            Circle c = new Circle(p.getX() * 200, 1000 - p.getY() * 200, 3);
+            Circle c = new Circle(p.getX() * 50, 600 - p.getY() * 50, 3);
             c.setFill(Color.BLUE);
             SplineDrivePath.pane.getChildren().add(c);
         }
@@ -61,7 +59,7 @@ public class Main extends Application {
         SplineDrivePath.pane.getChildren().add(SplineDrivePath.data);
 
 
-        Scene scene = new Scene(SplineDrivePath.pane, 1000, 1000);
+        Scene scene = new Scene(SplineDrivePath.pane, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 
