@@ -33,16 +33,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         SplineDrivePath.pane = new Pane();
-        List<Spline> splines =  new Path(new Point(0, 0, Math.PI/2),
-                new Point(0, 3, Math.PI/2),
-                new Point(1, 4, 0),
-                new Point(6, 4, 0),
-                new Point(7,5, Math.PI/2),
-                new Point(6, 6, -Math.PI)).getPath();
+        List<Spline> splines = new Path(new Point(0, 0, Math.PI/2),
+                new Point(0, 1, Math.PI/2),
+                new Point(1, 2, 0),
+                new Point(3, 2, 0),
+                new Point(4,3, Math.PI/2),
+                new Point(1, 4, -Math.PI),
+                new Point(2.5,3, 0)).getPath();
 
         for(double t = 0; t < splines.size(); t += 0.01) {
             Point p = splines.get((int) t).getPoint(t % 1);
-            Circle c = new Circle(p.getX() * 100, 1000 - p.getY() * 100, 3);
+            Circle c = new Circle(p.getX() * 200, 1000 - p.getY() * 200, 3);
             c.setFill(Color.BLUE);
             SplineDrivePath.pane.getChildren().add(c);
         }
