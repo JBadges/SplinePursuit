@@ -8,7 +8,6 @@ import java.util.List;
 public class Path {
 
 	private List<Spline> path;
-	private final double dT = 1e-6;
 
 	public Path(List<Spline> path) {
 		this.path = path;
@@ -23,6 +22,12 @@ public class Path {
 	}
 
 	public Point getPoint(double i) {
+		if(i < 0) {
+			return path.get(0).getPoint(0);
+		}
+		if(i >= path.size()) {
+			return path.get(path.size()-1).getPoint(1);
+		}
 		return path.get((int) i).getPoint(i % 1);
 	}
 
@@ -37,13 +42,5 @@ public class Path {
 	public int size() {
 		return path.size();
 	}
-
-//	public double getTotalDistance() {
-//		double dist = 0;
-//		for (double t = 0; t < path.size(); t += dT) {
-//			dist += Math.sqrt(path.get((int)t).dx(t%1) * path.get((int)t).dx(t%1) + path.get((int)t).dy(t%1) * path.get((int)t).dy(t%1)) * dT;
-//		}
-//		return dist;
-//	}
 
 }

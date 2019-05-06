@@ -10,6 +10,7 @@ import util.Logger;
 import util.Point;
 import util.Util;
 import util.simulation.SkidRobot;
+import util.spline.Path;
 import util.spline.Spline;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
 public class SplineDrivePath implements Action {
 
     private double maxLookahead;
-    private List<Spline> path;
+    private Path path;
     private double startTime;
     private double lastTime;
     private double[] voltages = {0.0, 0.0};
@@ -30,6 +31,8 @@ public class SplineDrivePath implements Action {
     private double lastT = 0;
     private double throttleConstant;
     private double curvatureConstant;
+    private double minThrottle;
+    private double maxThrottle;
     private boolean isBackwards;
 
     //TESTING
@@ -43,8 +46,10 @@ public class SplineDrivePath implements Action {
     public static Label data = new Label("X: 0 Y: 0 H: 0");
     public static Pane pane;
 
-    public SplineDrivePath(SkidRobot robot, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, List<Spline> path) {
+    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, Path path) {
         this.robot = robot;
+        this.minThrottle = minThrottle;
+        this.maxThrottle = maxThrottle;
         this.throttleConstant = throttleConstant;
         this.curvatureConstant = curvatureConstant;
         this.addedTurnConst = addedTurnConst;
@@ -52,23 +57,15 @@ public class SplineDrivePath implements Action {
         this.maxLookahead = maxLookahead;
     }
 
-    public SplineDrivePath(SkidRobot robot, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, Spline... path) {
-        this(robot, throttleConstant, curvatureConstant, addedTurnConst, maxLookahead, Arrays.asList(path));
+    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, Spline... path) {
+        this(robot, minThrottle, maxThrottle, throttleConstant, curvatureConstant, addedTurnConst, maxLookahead, new Path(Arrays.asList(path)));
     }
 
     @Override
     public void start() {
         startTime = System.currentTimeMillis()/1000.0;
         lastTime = startTime;
-
-        double percentComplete = findClosestPercent(robot.getPosition(), lastT);
-        Point desiredPoint;
-        if(percentComplete >= path.size()) {
-            desiredPoint = path.get(path.size()-1).getPoint(1);
-        } else {
-            desiredPoint = path.get((int) percentComplete).getPoint(percentComplete % 1);
-        }
-        isBackwards = getErrorPoint(robot.getPosition(), desiredPoint).getX() < 0;
+        isBackwards = getErrorPoint(robot.getPosition(), path.getPoint(findClosestPercent(robot.getPosition(), 0))).getX() < 0;
     }
 
     @Override
@@ -79,11 +76,7 @@ public class SplineDrivePath implements Action {
         double percentComplete = findClosestPercent(robot.getPosition(), lastT);
         Point desiredPoint, errorPoint;
         boolean last = Util.epsilonEquals(robot.getPosition().getX(), path.get(path.size()-1).getPoint2D(1).getX(), 0.1) && Util.epsilonEquals(robot.getPosition().getY(), path.get(path.size()-1).getPoint2D(1).getY(), 0.1);
-        if(percentComplete >= path.size()) {
-            desiredPoint = path.get(path.size()-1).getPoint(1);
-        } else {
-            desiredPoint = path.get((int) percentComplete).getPoint(percentComplete % 1);
-        }
+        desiredPoint = path.getPoint(percentComplete);
         errorPoint = getErrorPoint(robot.getPosition(), desiredPoint);
         lastT = percentComplete;
 
@@ -100,8 +93,8 @@ public class SplineDrivePath implements Action {
             }
         }
 
-        voltages[0] = throttleConstant * errorPoint.getX() - curvatureConstant * errorPoint.getY() - addedConst;
-        voltages[1] = throttleConstant * errorPoint.getX() + curvatureConstant * errorPoint.getY() + addedConst;
+        voltages[0] = throttleConstant * errorPoint.getX() / maxLookahead - curvatureConstant * errorPoint.getY() / maxLookahead - addedConst;
+        voltages[1] = throttleConstant * errorPoint.getX() / maxLookahead + curvatureConstant * errorPoint.getY() / maxLookahead + addedConst;
 
         if(isBackwards) {
             double temp = voltages[0];
@@ -133,7 +126,7 @@ public class SplineDrivePath implements Action {
                 data.setText("Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizeAngle(normalizedRobotHeading + (isBackwards ? Math.PI : 0)))) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading - normalizedRobotHeading)));
                 goalCircle.setCenterX(desiredPoint.getX() * 50);
                 goalCircle.setCenterY(600 - desiredPoint.getY() * 50);
-                Point guessedPos = path.get((int) guessedPositionT).getPoint(guessedPositionT % 1);
+                Point guessedPos = path.getPoint(guessedPositionT);
                 robotGuessedCircle.setCenterX(guessedPos.getX() * 50);
                 robotGuessedCircle.setCenterY(600 - guessedPos.getY() * 50);
                 robotCircle.setCenterX(robot.getPosition().getX() * 50);
@@ -174,7 +167,7 @@ public class SplineDrivePath implements Action {
         double distance = position.distance(path.get(0).getPoint(0));
         double smallestT = 0;
         for(double t = 0; t < path.size(); t += 0.01) {
-            double newDist = position.distance(path.get((int) t).getPoint(t % 1));
+            double newDist = position.distance(path.getPoint(t));
             if(newDist < distance) {
                 distance = newDist;
                 smallestT = t;
@@ -186,8 +179,9 @@ public class SplineDrivePath implements Action {
     private double findClosestPercent(Point position, double curT) {
         curT = guessedPositionT = findClosestPercent(position);
         double distance = 0;
-        for(double t = curT; t < path.size(); t += 0.01) {
-            distance += path.get((int) (t-0.01)).getPoint((t-0.01) % 1).distance(path.get((int) t).getPoint(t % 1));
+        final double dT = 0.01;
+        for(double t = curT; t < path.size(); t += dT) {
+            distance += path.getPoint(t).distance(path.getPoint(t+dT));
             if(distance > maxLookahead) {
                 return t;
             }
