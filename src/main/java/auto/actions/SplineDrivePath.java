@@ -28,7 +28,6 @@ public class SplineDrivePath implements Action {
     private double lastTime;
     private double[] voltages = {0.0, 0.0};
     private double addedTurnConst;
-    private double lastT = 0;
     private double throttleConstant;
     private double curvatureConstant;
     private double minThrottle;
@@ -73,28 +72,28 @@ public class SplineDrivePath implements Action {
         double curTime = (System.currentTimeMillis()/1000.0 - startTime);
         robot.updatePos(curTime - lastTime, voltages[0], voltages[1]);
 
-        double percentComplete = findClosestPercent(robot.getPosition(), lastT);
+        double percentComplete = findClosestPercent(robot.getPosition(), 0);
         Point desiredPoint, errorPoint;
         boolean last = Util.epsilonEquals(robot.getPosition().getX(), path.get(path.size()-1).getPoint2D(1).getX(), 0.1) && Util.epsilonEquals(robot.getPosition().getY(), path.get(path.size()-1).getPoint2D(1).getY(), 0.1);
         desiredPoint = path.getPoint(percentComplete);
         errorPoint = getErrorPoint(robot.getPosition(), desiredPoint);
-        lastT = percentComplete;
 
         final double normalizedGoalHeading = normalizeAngle(desiredPoint.getHeading());
-        final double normalizedRobotHeading = normalizeAngle(robot.getPosition().getHeading());
+        final double normalizedRobotHeading = normalizeAngle(robot.getPosition().getHeading() + (isBackwards ?  Math.PI : 0));
         double addedConst = 0;
 
         if(last) {
             goalCircle.setFill(Color.ORANGE);
+            addedConst = addedTurnConst * (normalizedGoalHeading - normalizedRobotHeading);
             if (isBackwards) {
-                addedConst = -addedTurnConst * (normalizedGoalHeading - normalizeAngle(normalizedRobotHeading + Math.PI));
-            } else {
-                addedConst = addedTurnConst * (normalizedGoalHeading - normalizedRobotHeading);
+                addedConst *= -1;
             }
         }
 
-        voltages[0] = throttleConstant * errorPoint.getX() / maxLookahead - curvatureConstant * errorPoint.getY() / maxLookahead - addedConst;
-        voltages[1] = throttleConstant * errorPoint.getX() / maxLookahead + curvatureConstant * errorPoint.getY() / maxLookahead + addedConst;
+        double throttle = Util.limit(throttleConstant * errorPoint.getX() / maxLookahead, minThrottle, maxThrottle);
+
+        voltages[0] = throttle - curvatureConstant * errorPoint.getY() / maxLookahead - addedConst;
+        voltages[1] = throttle + curvatureConstant * errorPoint.getY() / maxLookahead + addedConst;
 
         if(isBackwards) {
             double temp = voltages[0];
@@ -123,7 +122,7 @@ public class SplineDrivePath implements Action {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                data.setText("Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizeAngle(normalizedRobotHeading + (isBackwards ? Math.PI : 0)))) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading - normalizedRobotHeading)));
+                data.setText((isBackwards ? "R " : "F ") + "Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizedRobotHeading)) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f", Math.toDegrees(normalizedGoalHeading - normalizedRobotHeading)));
                 goalCircle.setCenterX(desiredPoint.getX() * 50);
                 goalCircle.setCenterY(600 - desiredPoint.getY() * 50);
                 Point guessedPos = path.getPoint(guessedPositionT);
