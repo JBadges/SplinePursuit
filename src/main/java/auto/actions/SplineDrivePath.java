@@ -11,6 +11,7 @@ import util.Point;
 import util.Util;
 import util.simulation.SkidRobot;
 import util.spline.Path;
+import util.spline.QuinticHermiteSpline;
 import util.spline.Spline;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class SplineDrivePath implements Action {
         this.maxLookahead = maxLookahead;
     }
 
-    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, Spline... path) {
+    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, QuinticHermiteSpline... path) {
         this(robot, minThrottle, maxThrottle, throttleConstant, curvatureConstant, addedTurnConst, maxLookahead, new Path(Arrays.asList(path)));
     }
 
@@ -70,7 +71,7 @@ public class SplineDrivePath implements Action {
     @Override
     public void update() {
         double curTime = (System.currentTimeMillis()/1000.0 - startTime);
-        robot.updatePos(curTime - lastTime, voltages[0], voltages[1]);
+        robot.updatePosNorm(curTime - lastTime, voltages[0], voltages[1]);
 
         double percentComplete = findClosestPercent(robot.getPosition(), 0);
         Point desiredPoint, errorPoint;
@@ -84,11 +85,11 @@ public class SplineDrivePath implements Action {
 
         if(last) {
             goalCircle.setFill(Color.ORANGE);
-            addedConst = addedTurnConst * (normalizedGoalHeading - normalizedRobotHeading);
-            if (isBackwards) {
-                addedConst *= -1;
-            }
+            addedConst = addedTurnConst * (angleBetween(normalizedGoalHeading, normalizedRobotHeading));
         }
+
+        addedConst *= isTurnCCW(normalizedRobotHeading, normalizedGoalHeading) ? -1 : 1;
+        addedConst *= isBackwards ? -1 : 1;
 
         double throttle = Util.limit(throttleConstant * errorPoint.getX() / maxLookahead, minThrottle, maxThrottle);
 
@@ -103,7 +104,7 @@ public class SplineDrivePath implements Action {
             voltages[1] *= 1;
         }
 
-        if(Math.abs(voltages[0]) > 12 || Math.abs(voltages[1]) > 12) {
+        if(Math.abs(voltages[0]) > 1 || Math.abs(voltages[1]) > 1) {
             if(Math.abs(voltages[0]) > Math.abs(voltages[1])) {
                 voltages[0] /= Math.abs(voltages[0]);
                 voltages[1] /= Math.abs(voltages[0]);
@@ -111,8 +112,8 @@ public class SplineDrivePath implements Action {
                 voltages[0] /= Math.abs(voltages[1]);
                 voltages[1] /= Math.abs(voltages[1]);
             }
-            voltages[0] *= 12;
-            voltages[1] *= 12;
+            voltages[0] *= 1;
+            voltages[1] *= 1;
         }
 
         Point robotPos = robot.getPosition();
@@ -122,7 +123,7 @@ public class SplineDrivePath implements Action {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                data.setText((isBackwards ? "R " : "F ") + "Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizedRobotHeading)) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f", Math.toDegrees(normalizedGoalHeading - normalizedRobotHeading)));
+                data.setText((isBackwards ? "R " : "F ") + "Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizedRobotHeading)) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f", Math.toDegrees(angleBetween(normalizedGoalHeading, normalizedRobotHeading))));
                 goalCircle.setCenterX(desiredPoint.getX() * 50);
                 goalCircle.setCenterY(600 - desiredPoint.getY() * 50);
                 Point guessedPos = path.getPoint(guessedPositionT);
@@ -143,6 +144,16 @@ public class SplineDrivePath implements Action {
         });
 
         lastTime = (System.currentTimeMillis()/1000.0 - startTime);
+    }
+
+    private double angleBetween(double a, double b) {
+        double diff = (a - b + Math.PI*2*10) % (Math.PI*2);
+        return diff <= Math.PI ? diff : Math.PI*2 - diff;
+    }
+
+    private boolean isTurnCCW(double curRad, double wantedRad) {
+        double diff = wantedRad - curRad;        // CCW = counter-clockwise ie. left
+        return diff > 0 ? diff > Math.PI : diff >= -Math.PI;
     }
 
     private double normalizeAngle(double rad) {

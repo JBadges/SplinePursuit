@@ -69,6 +69,10 @@ public class SkidRobot {
         rightVelocity += dt * acceleration;
     }
 
+    public void updatePosNorm(double dt, double left, double right) {
+        updatePos(dt, left*12, right*12);
+    }
+
     /**
      * Runs the dt in 0.001 second increments to improve accuracy
      *

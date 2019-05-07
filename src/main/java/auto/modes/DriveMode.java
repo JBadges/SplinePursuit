@@ -17,15 +17,14 @@ public class DriveMode extends AutoBase {
         runAction(new RunOnceAction() {
             @Override
             public void runOnce() {
-                SkidRobot.getInstance().setPosition(new Point(0, 0, Math.PI/2));
+                SkidRobot.getInstance().setPosition(new Point(0, 0, -Math.PI/2));
             }
         });
-        runAction(new SplineDrivePath(SkidRobot.getInstance(), -12, 12,25, 125,70, 0.35,
+        runAction(new SplineDrivePath(SkidRobot.getInstance(), -1, 1,25, 25,70, 0.20,
                 new Path(new Point(0, 0, Math.PI/2),
-                        new Point(0, 4, Math.PI/2),
-                        new Point(1, 5, 0),
-                        new Point(6, 5, 0),
-                        new Point(7,6, Math.PI/2),
-                        new Point(6, 7, Math.PI))));
+                        new Point(4, 7, 0),
+                        new Point(8, 8, -Math.PI/2),
+                        new Point(2, 5, Math.PI),
+                        new Point(7,3.25, 0))));
     }
 }

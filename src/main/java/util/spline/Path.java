@@ -7,17 +7,26 @@ import java.util.List;
 
 public class Path {
 
-	private List<Spline> path;
+	private List<QuinticHermiteSpline> path;
 
-	public Path(List<Spline> path) {
+	/**
+	 * Doesn't run optimizations
+	 * @param path
+	 */
+	public Path(List<QuinticHermiteSpline> path) {
 		this.path = path;
 	}
 
+	/**
+	 * Runs optimizations
+	 * @param points
+	 */
 	public Path(Point... points) {
-		List<Spline> splines = new ArrayList<>();
+		List<QuinticHermiteSpline> splines = new ArrayList<>();
 		for(int i = 0; i < points.length-1; i++) {
 			splines.add(new QuinticHermiteSpline(points[i], points[i+1]));
 		}
+		QuinticHermiteSpline.optimizeSpline(splines);
 		this.path = splines;
 	}
 
@@ -31,7 +40,7 @@ public class Path {
 		return path.get((int) i).getPoint(i % 1);
 	}
 
-	public List<Spline> getPath() {
+	public List<QuinticHermiteSpline> getPath() {
 		return path;
 	}
 

@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import util.Point;
 import util.spline.Path;
+import util.spline.QuinticHermiteSpline;
 import util.spline.Spline;
 
 import java.io.File;
@@ -32,12 +33,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         SplineDrivePath.pane = new Pane();
-        List<Spline> splines = new Path(new Point(0, 0, Math.PI/2),
-                new Point(0, 4, Math.PI/2),
-                new Point(1, 5, 0),
-                new Point(6, 5, 0),
-                new Point(7,6, Math.PI/2),
-                new Point(6, 7, Math.PI)).getPath();
+        List<QuinticHermiteSpline> splines = new Path(new Point(0, 0, Math.PI/2),
+                new Point(4, 7, 0),
+                new Point(8, 8, -Math.PI/2),
+                new Point(2, 5, Math.PI),
+                new Point(7,3.25, 0)).getPath();
 
         for(double t = 0; t < splines.size(); t += 0.01) {
             Point p = splines.get((int) t).getPoint(t % 1);
