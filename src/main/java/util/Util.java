@@ -48,6 +48,10 @@ public class Util {
         return sb.toString();
     }
 
+    public static boolean singleEpsilonEquals(double a, double epsilon) {
+        return -epsilon < a && a < epsilon;
+    }
+
     public static boolean epsilonEquals(double a, double b, double epsilon) {
         return (a - epsilon <= b) && (a + epsilon >= b);
     }

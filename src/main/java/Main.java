@@ -14,6 +14,7 @@ import util.spline.QuinticHermiteSpline;
 import util.spline.Spline;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,16 +32,23 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         SplineDrivePath.pane = new Pane();
-        List<QuinticHermiteSpline> splines = new Path(new Point(0, 0, Math.PI/2),
-                new Point(2, 3, Math.PI/2)).getPath();
+        List<List<QuinticHermiteSpline>> splines = Arrays.asList(new Path(new Point(0, 0, Math.PI/2),
+                new Point(2, 3, -Math.PI/2),
+                new Point(6, 6, Math.PI/2)).getPath());
 
-        for(double t = 0; t < splines.size(); t += 0.01) {
-            Point p = splines.get((int) t).getPoint(t % 1);
-            Circle c = new Circle(p.getX() * 50, 600 - p.getY() * 50, 3);
-            c.setFill(Color.BLUE);
-            SplineDrivePath.pane.getChildren().add(c);
+        for(List<QuinticHermiteSpline> s : splines) {
+            QuinticHermiteSpline.optimizeSpline(s);
+        }
+
+        for(int i = 0; i < splines.size(); i++) {
+            for (double t = 0; t < splines.get(i).size(); t += 0.01) {
+                Point p = splines.get(i).get((int) t).getPoint(t % 1);
+                Circle c = new Circle(p.getX() * 50, 600 - p.getY() * 50, 3);
+                c.setFill(Color.BLUE);
+                SplineDrivePath.pane.getChildren().add(c);
+            }
         }
         SplineDrivePath.goalCircle.setFill(Color.RED);
         SplineDrivePath.robotGuessedCircle.setFill(Color.YELLOW);
@@ -54,7 +62,6 @@ public class Main extends Application {
         SplineDrivePath.pane.getChildren().add(SplineDrivePath.robotCircle);
         SplineDrivePath.pane.getChildren().add(SplineDrivePath.headingLine);
         SplineDrivePath.pane.getChildren().add(SplineDrivePath.data);
-
 
         Scene scene = new Scene(SplineDrivePath.pane, 600, 600);
         primaryStage.setScene(scene);

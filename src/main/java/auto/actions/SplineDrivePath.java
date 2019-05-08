@@ -34,6 +34,8 @@ public class SplineDrivePath implements Action {
     private double minThrottle;
     private double maxThrottle;
     private boolean isBackwards;
+    private double distEpsilon;
+    private double angleEpsilon;
 
     //TESTING
     private SkidRobot robot;
@@ -45,8 +47,22 @@ public class SplineDrivePath implements Action {
     public static List<Circle> robotsPath = new ArrayList<>();
     public static Label data = new Label("X: 0 Y: 0 H: 0");
     public static Pane pane;
+    private Point predictedPoint;
 
-    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, Path path) {
+    /**
+     *
+     * @param robot - Simulation bot
+     * @param minThrottle - min throttle [-1,1]
+     * @param maxThrottle - max throttle [-1,1]
+     * @param throttleConstant - throttle proportionality constant
+     * @param curvatureConstant - turning proportionality constant
+     * @param addedTurnConst - final heading correction proportionality constnats
+     * @param maxLookahead - distance to find goal point
+     * @param distEpsilon - max distance error to finish path
+     * @param angleEpsilon - max angle error (deg) to finish path
+     * @param path - the path to follow
+     */
+    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, double distEpsilon, double angleEpsilon, Path path) {
         this.robot = robot;
         this.minThrottle = minThrottle;
         this.maxThrottle = maxThrottle;
@@ -55,10 +71,12 @@ public class SplineDrivePath implements Action {
         this.addedTurnConst = addedTurnConst;
         this.path = path;
         this.maxLookahead = maxLookahead;
+        this.distEpsilon = distEpsilon;
+        this.angleEpsilon = angleEpsilon;
     }
 
-    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, QuinticHermiteSpline... path) {
-        this(robot, minThrottle, maxThrottle, throttleConstant, curvatureConstant, addedTurnConst, maxLookahead, new Path(Arrays.asList(path)));
+    public SplineDrivePath(SkidRobot robot, double minThrottle, double maxThrottle, double throttleConstant, double curvatureConstant, double addedTurnConst, double maxLookahead, double distEpsilon, double angleEpsilon, QuinticHermiteSpline... path) {
+        this(robot, minThrottle, maxThrottle, throttleConstant, curvatureConstant, addedTurnConst, maxLookahead, distEpsilon, angleEpsilon, new Path(Arrays.asList(path)));
     }
 
     @Override
@@ -66,6 +84,8 @@ public class SplineDrivePath implements Action {
         startTime = System.currentTimeMillis()/1000.0;
         lastTime = startTime;
         isBackwards = getErrorPoint(robot.getPosition(), path.getPoint(findClosestPercent(robot.getPosition(), 0))).getX() < 0;
+        goalCircle.setFill(Color.RED);
+        Logger.write("path", "Time, Goal X, Goal Y, Goal Heading, Predicted X, Predicted Y, Predicted Heading, Robot X, Robot Y, Robot Heading, Left Voltage, Right Voltage");
     }
 
     @Override
@@ -118,7 +138,7 @@ public class SplineDrivePath implements Action {
 
         Point robotPos = robot.getPosition();
         Logger.write("path", curTime + ", " + desiredPoint.getX() + ", " + desiredPoint.getY() + ", " + desiredPoint.getHeading()
-        + ", " + robotPos.getX() + ", " + robotPos.getY() + ", " + robotPos.getHeading() + ", " + voltages[0] + ", " + voltages[1]);
+        + ", " + predictedPoint.getX() + ", " + predictedPoint.getY() + ", " + predictedPoint.getHeading() + ", " + robotPos.getX() + ", " + robotPos.getY() + ", " + robotPos.getHeading() + ", " + voltages[0] + ", " + voltages[1]);
 
         Platform.runLater(new Runnable() {
             @Override
@@ -189,6 +209,7 @@ public class SplineDrivePath implements Action {
 
     private double findClosestPercent(Point position, double curT) {
         curT = guessedPositionT = findClosestPercent(position);
+        predictedPoint = path.getPoint(guessedPositionT);
         double distance = 0;
         double dT = 0;
         for(double t = curT; t < path.size();) {
@@ -204,12 +225,13 @@ public class SplineDrivePath implements Action {
 
     @Override
     public boolean isFinished() {
-        return  (Util.epsilonEquals(robot.getPosition().getX(), path.get(path.size()-1).getPoint2D(1).getX(), 0.075) && Util.epsilonEquals(robot.getPosition().getY(), path.get(path.size()-1).getPoint2D(1).getY(), 0.075) && Util.epsilonEquals(normalizeAngle(robot.getPosition().getHeading() + (isBackwards ? Math.PI : 0)), normalizeAngle(path.get(path.size()-1).getHeading(1)), 3 * Math.PI/180));
+        return  (Util.epsilonEquals(robot.getPosition().getX(), path.get(path.size()-1).getPoint2D(1).getX(), distEpsilon) && Util.epsilonEquals(robot.getPosition().getY(), path.get(path.size()-1).getPoint2D(1).getY(), distEpsilon) && Util.singleEpsilonEquals(angleBetween(normalizeAngle(robot.getPosition().getHeading() + (isBackwards ? Math.PI : 0)), normalizeAngle(path.get(path.size()-1).getHeading(1))), angleEpsilon * Math.PI/180));
     }
 
     @Override
     public void done() {
         System.out.println("done path");
+        goalCircle.setFill(Color.GREEN);
     }
 
 }
