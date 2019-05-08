@@ -23,4 +23,17 @@ public abstract class Spline {
   // ds/dt
   public abstract double getVelocity(double t);
 
+  private final double dT = 1e-6;
+  private double pathLength = -1;
+
+  public final double getPathLength() {
+    if(pathLength != -1) {
+      return pathLength;
+    }
+    for(double t = 0; t <= 1-dT; t += dT) {
+      pathLength += getPoint2D(t).distance(getPoint2D(t+dT));
+    }
+    return pathLength;
+  }
+
 }

@@ -176,12 +176,13 @@ public class SplineDrivePath implements Action {
     private double findClosestPercent(Point position) {
         double distance = position.distance(path.get(0).getPoint(0));
         double smallestT = 0;
-        for(double t = 0; t < path.size(); t += 0.01) {
+        for(double t = 0; t < path.size();) {
             double newDist = position.distance(path.getPoint(t));
             if(newDist < distance) {
                 distance = newDist;
                 smallestT = t;
             }
+            t += 1 / (path.get((int) t).getPathLength() * 50);
         }
         return smallestT;
     }
@@ -189,12 +190,14 @@ public class SplineDrivePath implements Action {
     private double findClosestPercent(Point position, double curT) {
         curT = guessedPositionT = findClosestPercent(position);
         double distance = 0;
-        final double dT = 0.01;
-        for(double t = curT; t < path.size(); t += dT) {
+        double dT = 0;
+        for(double t = curT; t < path.size();) {
             distance += path.getPoint(t).distance(path.getPoint(t+dT));
             if(distance > maxLookahead) {
                 return t;
             }
+            dT = 1 / (path.get((int) t).getPathLength() * 50);
+            t += dT;
         }
         return path.size();
     }

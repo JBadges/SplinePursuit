@@ -34,10 +34,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         SplineDrivePath.pane = new Pane();
         List<QuinticHermiteSpline> splines = new Path(new Point(0, 0, Math.PI/2),
-                new Point(4, 7, 0),
-                new Point(8, 8, -Math.PI/2),
-                new Point(2, 5, Math.PI),
-                new Point(7,3.25, 0)).getPath();
+                new Point(2, 3, Math.PI/2)).getPath();
 
         for(double t = 0; t < splines.size(); t += 0.01) {
             Point p = splines.get((int) t).getPoint(t % 1);

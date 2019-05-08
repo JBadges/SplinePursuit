@@ -2,13 +2,52 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31dbe592-0685-48e2-be5a-dc0fff564249" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/fileContent/fileContent.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.8/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_openjfx_javafx_base_11_0_2_win.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_openjfx_javafx_base_11_0_2_mac.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_openjfx_javafx_controls_11_0_2_win.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_openjfx_javafx_controls_11_0_2_mac.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_openjfx_javafx_graphics_11_0_2_win.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_openjfx_javafx_graphics_11_0_2_mac.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/auto.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/auto.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/spline/Path.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/util/spline/Path.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/AutoBase.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/AutoModeEndedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/AutoModeExecutor$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/AutoModeExecutor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/actions/Action.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/actions/ParallelAction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/actions/RunOnceAction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/actions/SeriesAction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/actions/SplineDrivePath$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/actions/SplineDrivePath.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/modes/DriveMode$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/auto/modes/DriveMode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/Logger.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/PID.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/Point.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/Util.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/poofs/Pose2d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/poofs/Pose2dWithCurvature.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/poofs/Rotation2d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/poofs/Translation2d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/poofs/Twist2d.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/poofs/Util.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/simulation/SkidRobot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/spline/Path.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/spline/QuinticHermiteSpline$ControlPoint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/spline/QuinticHermiteSpline.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/util/spline/Spline.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/path.csv" beforeDir="false" afterPath="$PROJECT_DIR$/path.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/auto/actions/SplineDrivePath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/auto/actions/SplineDrivePath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/auto/modes/DriveMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/auto/modes/DriveMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/simulation/SkidRobot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/simulation/SkidRobot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/util/spline/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/spline/Path.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/spline/Spline.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/spline/Spline.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -50,24 +89,21 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="38" column="41" lean-forward="true" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
+            <state relative-caret-position="360">
+              <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <marker date="1557326059862" expanded="true" signature="1068:2103" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/auto/actions/SplineDrivePath.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-60">
-              <caret line="91" column="43" selection-start-line="91" selection-start-column="43" selection-end-line="91" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#9220#9221#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="346">
+              <caret line="198" column="62" selection-start-line="198" selection-start-column="62" selection-end-line="198" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -75,31 +111,34 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/util/spline/Path.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+            <state relative-caret-position="237">
+              <caret line="47" column="15" selection-start-line="47" selection-start-column="15" selection-end-line="47" selection-end-column="15" />
               <folding>
-                <element signature="e#235#236#0" expanded="true" />
-                <element signature="e#258#259#0" expanded="true" />
-                <element signature="e#855#856#0" expanded="true" />
-                <element signature="e#873#874#0" expanded="true" />
-                <element signature="e#902#903#0" expanded="true" />
-                <element signature="e#927#928#0" expanded="true" />
-                <element signature="e#949#950#0" expanded="true" />
-                <element signature="e#974#975#0" expanded="true" />
+                <element signature="e#260#261#0" expanded="true" />
+                <element signature="e#283#284#0" expanded="true" />
+                <element signature="e#1073#1074#0" expanded="true" />
+                <element signature="e#1098#1099#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/util/spline/Spline.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/auto/modes/DriveMode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="69" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
+            <state relative-caret-position="255">
+              <caret line="19" column="80" lean-forward="true" selection-start-line="19" selection-start-column="80" selection-end-line="19" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#408#592#0" expanded="true" />
-                <element signature="e#591#592#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,7 +176,6 @@
         <option value="$PROJECT_DIR$/src/main/java/util/splines/QuinticHermiteSpline.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/geometry/Rotation2d.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/splines/Spline.java" />
-        <option value="$PROJECT_DIR$/src/main/java/util/spline/Spline.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/poofs/Pose2dWithCurvature.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/poofs/Twist2d.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/poofs/Util.java" />
@@ -153,14 +191,15 @@
         <option value="$PROJECT_DIR$/src/main/java/auto/AutoBase.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/util/simulation/SkidRobot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/util/spline/Spline.java" />
         <option value="$PROJECT_DIR$/src/main/java/util/spline/Path.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/auto/actions/SplineDrivePath.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/auto/modes/DriveMode.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1440" />
     <option name="height" value="799" />
@@ -201,6 +240,23 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="auto" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="auto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="splinepursuit" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="auto" type="462c0819:PsiDirectoryNode" />
+              <item name="modes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="auto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="splinepursuit" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -210,14 +266,14 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="util" type="462c0819:PsiDirectoryNode" />
-              <item name="simulation" type="462c0819:PsiDirectoryNode" />
+              <item name="spline" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -248,6 +304,15 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.splinepursuit [run]">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file enabled="true" id="idea.log" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -354,15 +419,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file enabled="true" id="idea.log" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.splinepursuit [run]" />
@@ -385,12 +441,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="0" y="22" width="1440" height="799" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="UI Designer" order="0" />
       <window_info id="Favorites" order="1" side_tool="true" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="3" visible="true" weight="0.11886994" />
+      <window_info content_ui="combo" id="Project" order="3" visible="true" weight="0.16380544" />
       <window_info id="Structure" order="4" weight="0.26066098" />
       <window_info id="Image Layers" order="5" />
       <window_info id="Capture Tool" order="6" />
@@ -399,7 +456,7 @@
       <window_info anchor="bottom" id="Terminal" order="2" weight="0.32936078" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.20151679" />
+      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.20226309" />
       <window_info anchor="bottom" id="Debug" order="6" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
@@ -459,16 +516,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/util/splines/Spline.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/util/splines/QuinticHermiteSpline.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/util/geometry/Rotation2d.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/util/spline/Spline.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="imports" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/util/poofs/Twist2d.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -622,52 +669,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home/lib/src.zip!/java.desktop/java/awt/geom/Point2D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="378" column="44" lean-forward="true" selection-start-line="378" selection-start-column="44" selection-end-line="378" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/util/spline/Spline.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/auto/actions/SplineDrivePath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="198" column="62" selection-start-line="198" selection-start-column="62" selection-end-line="198" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/util/spline/Path.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="47" column="15" selection-start-line="47" selection-start-column="15" selection-end-line="47" selection-end-column="15" />
+          <folding>
+            <element signature="e#260#261#0" expanded="true" />
+            <element signature="e#283#284#0" expanded="true" />
+            <element signature="e#1073#1074#0" expanded="true" />
+            <element signature="e#1098#1099#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="38" column="41" lean-forward="true" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
+        <state relative-caret-position="360">
+          <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1557326059862" expanded="true" signature="1068:2103" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/auto/modes/DriveMode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="69" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
+        <state relative-caret-position="255">
+          <caret line="19" column="80" lean-forward="true" selection-start-line="19" selection-start-column="80" selection-end-line="19" selection-end-column="80" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#408#592#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/util/spline/Path.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
-          <folding>
-            <element signature="e#235#236#0" expanded="true" />
-            <element signature="e#258#259#0" expanded="true" />
-            <element signature="e#855#856#0" expanded="true" />
-            <element signature="e#873#874#0" expanded="true" />
-            <element signature="e#902#903#0" expanded="true" />
-            <element signature="e#927#928#0" expanded="true" />
-            <element signature="e#949#950#0" expanded="true" />
-            <element signature="e#974#975#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/auto/actions/SplineDrivePath.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="91" column="43" selection-start-line="91" selection-start-column="43" selection-end-line="91" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9220#9221#0" expanded="true" />
           </folding>
         </state>
       </provider>

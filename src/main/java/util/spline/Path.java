@@ -45,6 +45,12 @@ public class Path {
 	}
 
 	public Spline get(int i) {
+		if(i >= path.size()) {
+			return path.get(path.size()-1);
+		}
+		if (i < 0) {
+			return path.get(0);
+		}
 		return path.get(i);
 	}
 
