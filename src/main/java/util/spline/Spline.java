@@ -4,6 +4,7 @@ package util.spline;
 import util.Point;
 
 import java.awt.geom.Point2D;
+import java.util.HashMap;
 
 public abstract class Spline {
 
@@ -30,10 +31,12 @@ public abstract class Spline {
     if(pathLength != -1) {
       return pathLength;
     }
+    pathLength = 0;
     for(double t = 0; t <= 1-dT; t += dT) {
-      pathLength += getPoint2D(t).distance(getPoint2D(t+dT));
+      pathLength += getPoint(t).distance(getPoint(t+dT));
     }
     return pathLength;
   }
+
 
 }

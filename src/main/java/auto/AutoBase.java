@@ -6,7 +6,9 @@ import auto.actions.Action;
  * AutoBase
  */
 public abstract class AutoBase {
-    protected double updateRate = 1.0 / 50.0;
+    protected double updateRate = 1.0 / 100.0;
+    private double lastUpdate = System.currentTimeMillis();
+    private double dT;
     protected boolean active = false;
 
     protected abstract void routine() throws AutoModeEndedException;
@@ -15,6 +17,7 @@ public abstract class AutoBase {
         active = true;
 
         try {
+            lastUpdate = System.currentTimeMillis();
             routine();
         } catch (AutoModeEndedException e) {
             return;
@@ -49,7 +52,8 @@ public abstract class AutoBase {
         while (isActive() && !action.isFinished()) {
             action.update();
             long waitTime = (long) (updateRate * 1000.0);
-
+            dT = System.currentTimeMillis() - lastUpdate;
+            lastUpdate = System.currentTimeMillis();
             try {
                 Thread.sleep(waitTime);
             } catch (InterruptedException e) {
@@ -58,6 +62,10 @@ public abstract class AutoBase {
         }
 
         action.done();
+    }
+
+    public double getdT() {
+        return dT;
     }
 
 }

@@ -1,3 +1,5 @@
+package main;
+
 import auto.AutoModeExecutor;
 import auto.actions.SplineDrivePath;
 import auto.modes.DriveMode;
@@ -11,7 +13,6 @@ import javafx.stage.Stage;
 import util.Point;
 import util.spline.Path;
 import util.spline.QuinticHermiteSpline;
-import util.spline.Spline;
 
 import java.io.File;
 import java.util.Arrays;
@@ -21,13 +22,12 @@ import java.util.List;
  * Created by jacks on 2019-05-04.
  */
 public class Main extends Application {
-    private static AutoModeExecutor auto;
+    public static AutoModeExecutor auto;
 
     public static void main(String[] args) {
         new File("path.csv").delete();
         auto = new AutoModeExecutor();
         auto.setAutoMode(new DriveMode());
-        auto.start();
         launch(args);
     }
 
@@ -35,12 +35,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         SplineDrivePath.pane = new Pane();
         List<List<QuinticHermiteSpline>> splines = Arrays.asList(new Path(new Point(0, 0, Math.PI/2),
-                new Point(2, 3, -Math.PI/2),
-                new Point(6, 6, Math.PI/2)).getPath());
+                new Point(6, 2, Math.PI/2),
+                new Point(3, 6, 0)).getPath());
 
         for(List<QuinticHermiteSpline> s : splines) {
             QuinticHermiteSpline.optimizeSpline(s);
         }
+
+        auto.start();
 
         for(int i = 0; i < splines.size(); i++) {
             for (double t = 0; t < splines.get(i).size(); t += 0.01) {

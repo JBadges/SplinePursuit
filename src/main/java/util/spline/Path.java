@@ -1,21 +1,27 @@
 package util.spline;
 
 import util.Point;
+import util.poofs.InterpolatingDouble;
+import util.poofs.InterpolatingTreeMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Path {
 
 	private List<QuinticHermiteSpline> path;
+	//T, dist
+	private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> distanceWaypoints;
 
 	/**
 	 * Doesn't run optimizations
 	 * @param path
 	 */
-	public Path(List<QuinticHermiteSpline> path) {
-		this.path = path;
-	}
+//	public Path(List<QuinticHermiteSpline> path) {
+//		this.path = path;
+//		generateDistanceWaypoints();
+//	}
 
 	/**
 	 * Runs optimizations
@@ -28,6 +34,25 @@ public class Path {
 		}
 		QuinticHermiteSpline.optimizeSpline(splines);
 		this.path = splines;
+		generateDistanceWaypoints();
+	}
+
+	private void generateDistanceWaypoints() {
+		distanceWaypoints = new InterpolatingTreeMap<>();
+		double d = 0;
+		final double dT = 1e-6;
+		for(double t = 0; t < size(); t += dT) {
+			distanceWaypoints.put(new InterpolatingDouble(t), new InterpolatingDouble(d));
+			d += getPoint(t).distance(getPoint(t + dT));
+		}
+	}
+
+	public double getDistance(double t) {
+		return distanceWaypoints.getInterpolated(new InterpolatingDouble(t)).value;
+	}
+
+	public double getDistanceBetween(double start, double end) {
+		return getDistance(end) - getDistance(start);
 	}
 
 	public Point getPoint(double i) {
@@ -40,9 +65,30 @@ public class Path {
 		return path.get((int) i).getPoint(i % 1);
 	}
 
+	public double  getCurvature(double t) {
+		if(t < 0) {
+			return path.get(0).getCurvature(0);
+		}
+		if(t >= path.size()) {
+			return path.get(path.size()-1).getCurvature(1);
+		}
+		return path.get((int) t).getCurvature(t % 1);
+	}
+
+	public double getDCurvature(double t) {
+		if(t < 0) {
+			return path.get(0).getDCurvature(0);
+		}
+		if(t >= path.size()) {
+			return path.get(path.size()-1).getDCurvature(1);
+		}
+		return path.get((int) t).getDCurvature(t % 1);
+	}
+
 	public List<QuinticHermiteSpline> getPath() {
 		return path;
 	}
+
 
 	public Spline get(int i) {
 		if(i >= path.size()) {

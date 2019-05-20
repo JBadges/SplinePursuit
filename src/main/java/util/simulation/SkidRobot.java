@@ -10,7 +10,7 @@ public class SkidRobot {
 
     public static SkidRobot getInstance(){
         if(instance == null) {
-            instance = new SkidRobot(1,1,6,1);
+            instance = new SkidRobot(1,3,6,20);
         }
         return instance;
     }
@@ -64,7 +64,7 @@ public class SkidRobot {
         leftVelocity += dt * acceleration;
     }
 
-    private void updateRightVelcoty(double dt, double voltage) {
+    private void updateRightVelocity(double dt, double voltage) {
         double acceleration = -Kt * kG * kG / (Kv * resistance * kr * kr * mass) * rightVelocity + kG * Kt / (resistance * kr * mass) * voltage;
         rightVelocity += dt * acceleration;
     }
@@ -111,7 +111,7 @@ public class SkidRobot {
             position.setHeading(newHeading);
 
             updateLeftVelocity(current_dt, voltageLeft);
-            updateRightVelcoty(current_dt, voltageRight);
+            updateRightVelocity(current_dt, voltageRight);
 
             dt -= 0.001;
         }
@@ -135,6 +135,10 @@ public class SkidRobot {
 
     public void setPosition(Point pose) {
         position = pose;
+    }
+
+    public double getAvgVelcotiy() {
+        return (leftVelocity + rightVelocity) / 2 * speedModifier;
     }
 
 }
