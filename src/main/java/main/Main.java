@@ -38,11 +38,9 @@ public class Main extends Application {
         List<List<QuinticHermiteSpline>> splines = Arrays.asList(new Path(
                 new Point(0, 0, Math.PI/2),
                 new Point(0.7,0.8,0),
-                new Point(1,0,-Math.PI/2)).getPath());
-
-        for(List<QuinticHermiteSpline> s : splines) {
-            QuinticHermiteSpline.optimizeSpline(s);
-        }
+                new Point(1,0.8,-Math.PI/2),
+                new Point(.5,.5,Math.PI/2),
+                new Point(.35,.6, Math.PI)).getPath());
 
         auto.start();
 

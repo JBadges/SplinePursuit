@@ -6,7 +6,7 @@ import util.poofs.Util;
 
 public class SkidRobot {
 
-    private static SkidRobot instance = new SkidRobot(0.7363,3,45);
+    private static SkidRobot instance = new SkidRobot(0.7363,6,45);
 
     public static SkidRobot getInstance(){
         return instance;

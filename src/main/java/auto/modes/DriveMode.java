@@ -21,9 +21,11 @@ public class DriveMode extends AutoBase {
             }
         });
 
-        runAction(new SplineDrivePath(SkidRobot.getInstance(), -1, 1,1, 15,5, 0.05, 0.05, 3,
+        runAction(new SplineDrivePath(SkidRobot.getInstance(), -1, 1,1, 12,5, 0.025, 0.01, 2,
                 new Point(0, 0, Math.PI/2),
                 new Point(0.7,0.8,0),
-                new Point(1,0,-Math.PI/2)));
+                new Point(1,0.8,-Math.PI/2),
+                new Point(.5,.5,Math.PI/2),
+                new Point(.35,.6, Math.PI)));
     }
 }

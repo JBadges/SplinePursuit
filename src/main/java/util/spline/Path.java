@@ -18,10 +18,10 @@ public class Path {
 	 * Doesn't run optimizations
 	 * @param path
 	 */
-	public Path(List<QuinticHermiteSpline> path) {
-		this.path = path;
-		generateDistanceWaypoints();
-	}
+//	public Path(List<QuinticHermiteSpline> path) {
+//		this.path = path;
+//		generateDistanceWaypoints();
+//	}
 
 	/**
 	 * Runs optimizations

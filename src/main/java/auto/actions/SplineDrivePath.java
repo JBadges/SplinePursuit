@@ -88,7 +88,7 @@ public class SplineDrivePath implements Action {
         lastTime = startTime;
         isBackwards = getErrorPoint(robot.getPosition(), path.getPoint(lookaheadPoint(robot.getPosition()))).getX() < 0;
         goalCircle.setFill(Color.RED);
-        Logger.write("path", "Time, Goal X, Goal Y, Goal Heading, Predicted X, Predicted Y, Predicted Heading, Robot X, Robot Y, Robot Heading, Left Voltage, Right Voltage");
+        Logger.write("path", "Time, Goal X, Goal Y, Goal Heading, Predicted X, Predicted Y, Predicted Heading, Robot X, Robot Y, Robot Heading, Left Voltage, Right Voltage, Throttle, Curve, Added Curve");
     }
 
     @Override
@@ -97,7 +97,7 @@ public class SplineDrivePath implements Action {
         robot.updatePosNorm(curTime - lastTime, voltages[0], voltages[1]);
         double percentComplete = lookaheadPoint(robot.getPosition());
         Point desiredPoint, errorPoint;
-        boolean last = Util.epsilonEquals(robot.getPosition().getX(), path.get(path.size()-1).getPoint2D(1).getX(), 0.1) && Util.epsilonEquals(robot.getPosition().getY(), path.get(path.size()-1).getPoint2D(1).getY(), 0.1);
+        boolean last = Util.epsilonEquals(robot.getPosition().getX(), path.getPoint(path.size()).getX(), distEpsilon) && Util.epsilonEquals(robot.getPosition().getY(), path.getPoint(path.size()).getY(), distEpsilon);
         desiredPoint = path.getPoint(percentComplete);
         errorPoint = getErrorPoint(robot.getPosition(), desiredPoint);
 
@@ -105,18 +105,24 @@ public class SplineDrivePath implements Action {
         final double normalizedRobotHeading = normalizeAngle(robot.getPosition().getHeading() + (isBackwards ?  Math.PI : 0));
         double addedConst = 0;
 
+        double curve = curvatureConstant * errorPoint.getY() / maxLookahead;
+        double throttle = Util.limit(throttleConstant * errorPoint.getX() / maxLookahead, minThrottle, maxThrottle);
+
+
         if(last) {
             goalCircle.setFill(Color.ORANGE);
             addedConst = addedTurnConst * (angleBetween(normalizedGoalHeading, normalizedRobotHeading));
             addedConst *= isTurnCCW(normalizedRobotHeading, normalizedGoalHeading) ? -1 : 1;
             addedConst *= isBackwards ? -1 : 1;
+            voltages[0] = throttle - addedConst;
+            voltages[1] = throttle + addedConst;
+        } else {
+            voltages[0] = throttle - curve;
+            voltages[1] = throttle + curve;
         }
 
-        double curv = curvatureConstant * errorPoint.getY() / maxLookahead;
-        double throttle = Util.limit(throttleConstant * errorPoint.getX() / maxLookahead, minThrottle, maxThrottle);
 
-        voltages[0] = throttle - curv - addedConst;
-        voltages[1] = throttle + curv + addedConst;
+
 
         if(isBackwards) {
             double temp = voltages[0];
@@ -145,15 +151,15 @@ public class SplineDrivePath implements Action {
 
         ongoingScore += accuracyScore;
                 Logger.write("path", curTime + ", " + desiredPoint.getX() + ", " + desiredPoint.getY() + ", " + desiredPoint.getHeading()
-        + ", " + predictedPoint.getX() + ", " + predictedPoint.getY() + ", " + predictedPoint.getHeading() + ", " + robotPos.getX() + ", " + robotPos.getY() + ", " + robotPos.getHeading() + ", " + voltages[0] + ", " + voltages[1]);
+        + ", " + predictedPoint.getX() + ", " + predictedPoint.getY() + ", " + predictedPoint.getHeading() + ", " + robotPos.getX() + ", " + robotPos.getY() + ", " + robotPos.getHeading() + ", " + voltages[0] + ", " + voltages[1] + ", " + throttle + ", " + curve + ", " + addedConst);
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 Main.throttle.setAngle( (throttle-0)/(2-0) * 360);
-                Main.throttle.setName(String.format("%.2f", throttle));
-                Main.curve.setAngle( (curv - (-1))/(1-(-1)) * 360);
-                Main.curve.setName(String.format("%.2f", curv));
+                Main.throttle.setName(String.format("%.4f", throttle));
+                Main.curve.setAngle( (curve - (-1))/(1-(-1)) * 360);
+                Main.curve.setName(String.format("%.4f", curve));
                 data.setText("dT: " + Main.auto.getAutoMode().getdT() + (isBackwards ? "R " : "F ") + "Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizedRobotHeading)) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f", Math.toDegrees(angleBetween(normalizedGoalHeading, normalizedRobotHeading))) + " Score: " + String.format("%.2f", ongoingScore));
                 goalCircle.setCenterX(desiredPoint.getX() * 600);
                 goalCircle.setCenterY(600 - desiredPoint.getY() * 600);
