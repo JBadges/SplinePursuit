@@ -75,6 +75,13 @@ public class Point {
       setHeading(getHeading() + Math.PI * 2);
   }
 
+  public boolean equals(Point p, double distEps, double angleEps) {
+    boolean same = Util.epsilonEquals(getX(), p.getX(), distEps);
+    same &= Util.epsilonEquals(getY(), p.getY(), distEps);
+    same &= Util.epsilonEquals(Util.angleBetween(Util.normalizeAngle(getHeading()), Util.normalizeAngle(p.getHeading())),0, angleEps);
+    return same;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof Point)) {

@@ -1,5 +1,6 @@
 package util;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,5 +71,43 @@ public class Util {
             result &= epsilonEquals(value_in, value, epsilon);
         }
         return result;
+    }
+
+    public static double[] absLimitWithRatio(double[] in, double magnitude) {
+        double[] copy = Arrays.copyOf(in, in.length);
+        double largest = 0;
+        boolean limit = false;
+        for(double d : copy) {
+            limit |= Math.abs(d) > magnitude;
+            largest = Math.max(largest, Math.abs(d));
+        }
+
+        if(limit) {
+            for (int i = 0; i < copy.length; i++) {
+                copy[i] /= largest;
+                copy[i] *= magnitude;
+            }
+        }
+        return copy;
+    }
+
+    public static double angleBetween(double a, double b) {
+        double diff = (a - b + Math.PI*2*10) % (Math.PI*2);
+        return diff <= Math.PI ? diff : Math.PI*2 - diff;
+    }
+
+    public static boolean isTurnCCW(double curRad, double wantedRad) {
+        double diff = wantedRad - curRad;        // CCW = counter-clockwise ie. left
+        return diff > 0 ? diff > Math.PI : diff >= -Math.PI;
+    }
+
+    public static double normalizeAngle(double rad) {
+        while(rad > 2*Math.PI) {
+            rad -= Math.PI * 2;
+        }
+        while(rad < 0) {
+            rad += Math.PI * 2;
+        }
+        return rad;
     }
 }
