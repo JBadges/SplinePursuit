@@ -6,7 +6,7 @@ import auto.actions.Action;
  * AutoBase
  */
 public abstract class AutoBase {
-    protected double updateRate = 1.0 / 100.0;
+    protected double updateRate = 1.0 / 50.0;
     private double lastUpdate = System.currentTimeMillis();
     private double dT;
     protected boolean active = false;

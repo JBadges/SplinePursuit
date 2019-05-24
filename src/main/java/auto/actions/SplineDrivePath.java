@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import main.Main;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
+import util.Interpolate;
 import util.Logger;
 import util.Point;
 import util.Util;
@@ -46,6 +48,7 @@ public class SplineDrivePath implements Action {
     public static List<Circle> robotsPath = new ArrayList<>();
     public static Label data = new Label("X: 0 Y: 0 H: 0");
     public static Pane pane;
+    private double ongoingScore = 0;
     private Point predictedPoint;
 
     /**
@@ -55,7 +58,7 @@ public class SplineDrivePath implements Action {
      * @param maxThrottle - max throttle [-1,1]
      * @param throttleConstant - throttle proportionality constant
      * @param curvatureConstant - turning proportionality constant
-     * @param addedTurnConst - final heading correction proportionality constnats
+     * @param addedTurnConst - final heading correction proportionality constants
      * @param maxLookahead - distance to find goal point
      * @param distEpsilon - max distance error to finish path
      * @param angleEpsilon - max angle error (deg) to finish path
@@ -80,6 +83,7 @@ public class SplineDrivePath implements Action {
 
     @Override
     public void start() {
+        ongoingScore = 0;
         startTime = System.currentTimeMillis()/1000.0;
         lastTime = startTime;
         isBackwards = getErrorPoint(robot.getPosition(), path.getPoint(lookaheadPoint(robot.getPosition()))).getX() < 0;
@@ -104,15 +108,15 @@ public class SplineDrivePath implements Action {
         if(last) {
             goalCircle.setFill(Color.ORANGE);
             addedConst = addedTurnConst * (angleBetween(normalizedGoalHeading, normalizedRobotHeading));
+            addedConst *= isTurnCCW(normalizedRobotHeading, normalizedGoalHeading) ? -1 : 1;
+            addedConst *= isBackwards ? -1 : 1;
         }
 
-        addedConst *= isTurnCCW(normalizedRobotHeading, normalizedGoalHeading) ? -1 : 1;
-        addedConst *= isBackwards ? -1 : 1;
-
+        double curv = curvatureConstant * errorPoint.getY() / maxLookahead;
         double throttle = Util.limit(throttleConstant * errorPoint.getX() / maxLookahead, minThrottle, maxThrottle);
 
-        voltages[0] = throttle - curvatureConstant * errorPoint.getY() / maxLookahead - addedConst;
-        voltages[1] = throttle + curvatureConstant * errorPoint.getY() / maxLookahead + addedConst;
+        voltages[0] = throttle - curv - addedConst;
+        voltages[1] = throttle + curv + addedConst;
 
         if(isBackwards) {
             double temp = voltages[0];
@@ -130,25 +134,34 @@ public class SplineDrivePath implements Action {
                 voltages[0] /= Math.abs(voltages[1]);
                 voltages[1] /= Math.abs(voltages[1]);
             }
-            voltages[0] *= 1;
-            voltages[1] *= 1;
         }
 
         Point robotPos = robot.getPosition();
-        Logger.write("path", curTime + ", " + desiredPoint.getX() + ", " + desiredPoint.getY() + ", " + desiredPoint.getHeading()
+
+        double accuracyScore = robotPos.distance(path.getPoint(guessedPositionT)) +
+                Math.min(
+                        angleBetween(normalizeAngle(robotPos.getHeading()), normalizeAngle(path.getHeading(guessedPositionT))),
+                        angleBetween(normalizeAngle(robotPos.getHeading()), normalizeAngle(path.getHeading(guessedPositionT) + Math.PI))) / Math.PI;
+
+        ongoingScore += accuracyScore;
+                Logger.write("path", curTime + ", " + desiredPoint.getX() + ", " + desiredPoint.getY() + ", " + desiredPoint.getHeading()
         + ", " + predictedPoint.getX() + ", " + predictedPoint.getY() + ", " + predictedPoint.getHeading() + ", " + robotPos.getX() + ", " + robotPos.getY() + ", " + robotPos.getHeading() + ", " + voltages[0] + ", " + voltages[1]);
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                data.setText("dT: " + Main.auto.getAutoMode().getdT() + (isBackwards ? "R " : "F ") + "Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizedRobotHeading)) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f", Math.toDegrees(angleBetween(normalizedGoalHeading, normalizedRobotHeading))));
-                goalCircle.setCenterX(desiredPoint.getX() * 50);
-                goalCircle.setCenterY(600 - desiredPoint.getY() * 50);
+                Main.throttle.setAngle( (throttle-0)/(2-0) * 360);
+                Main.throttle.setName(String.format("%.2f", throttle));
+                Main.curve.setAngle( (curv - (-1))/(1-(-1)) * 360);
+                Main.curve.setName(String.format("%.2f", curv));
+                data.setText("dT: " + Main.auto.getAutoMode().getdT() + (isBackwards ? "R " : "F ") + "Time: " + String.format("%.2f", curTime) + " X: " + String.format("%.4f", errorPoint.getX()) + " Y: " + String.format("%.4f", errorPoint.getY()) + " RH: " + String.format("%.4f", Math.toDegrees(normalizedRobotHeading)) + " GH: " + String.format("%.4f",Math.toDegrees(normalizedGoalHeading)) +" H: " + String.format("%.4f", Math.toDegrees(angleBetween(normalizedGoalHeading, normalizedRobotHeading))) + " Score: " + String.format("%.2f", ongoingScore));
+                goalCircle.setCenterX(desiredPoint.getX() * 600);
+                goalCircle.setCenterY(600 - desiredPoint.getY() * 600);
                 Point guessedPos = path.getPoint(guessedPositionT);
-                robotGuessedCircle.setCenterX(guessedPos.getX() * 50);
-                robotGuessedCircle.setCenterY(600 - guessedPos.getY() * 50);
-                robotCircle.setCenterX(robot.getPosition().getX() * 50);
-                robotCircle.setCenterY(600 - robot.getPosition().getY() * 50);
+                robotGuessedCircle.setCenterX(guessedPos.getX() * 600);
+                robotGuessedCircle.setCenterY(600 - guessedPos.getY() * 600);
+                robotCircle.setCenterX(robot.getPosition().getX() * 600);
+                robotCircle.setCenterY(600 - robot.getPosition().getY() * 600);
                 headingLine.setStartX(robotCircle.getCenterX());
                 headingLine.setStartY(robotCircle.getCenterY());
                 headingLine.setEndX(robotCircle.getCenterX() + robotCircle.getRadius() * Math.cos(robot.getPosition().getHeading()));
@@ -194,13 +207,13 @@ public class SplineDrivePath implements Action {
     private double getClosestPercent(Point position) {
         double distance = position.distance(path.getPoint(guessedPositionT));
         double smallestT = guessedPositionT;
-        for(double t = 0; t < path.size();) {
+        for(double t = guessedPositionT; t < path.size();) {
             double newDist = position.distance(path.getPoint(t));
             if(newDist < distance) {
                 distance = newDist;
                 smallestT = t;
             }
-            t += 1 / (path.get((int) t).getPathLength() * 50);
+            t += 1 / (path.get((int) t).getPathLength() * 1e3);
         }
         return smallestT;
     }
@@ -216,7 +229,7 @@ public class SplineDrivePath implements Action {
                 lastLookaheadT = t;
                 return t;
             }
-            dT = 1 / (path.get((int) t).getPathLength() * 1e5);
+            dT = 1 / (path.get((int) t).getPathLength() * 1e3);
         }
         lastLookaheadT = path.size();
         return path.size();
@@ -225,10 +238,10 @@ public class SplineDrivePath implements Action {
     private double lookaheadDistance() {
         double look = maxLookahead;
 //        look *= Math.max(Math.abs(robot.getAvgVelcotiy()), 1);
-//        look /= Util.limit(Math.abs(path.getDCurvature(guessedPositionT)), 0.8, 3);
-//        look /= Util.limit(Math.abs(path.getCurvature(guessedPositionT)), 0.5,1.5);
+//        look /= Util.limit(Math.abs(path.getDCurvature(guessedPositionT)), 0.6, 3);
+//        look /= Util.limit(Math.abs(path.getCurvature(guessedPositionT)), 0.3,1.5);
 //        look /= Util.limit(Math.abs(path.getCurvature(lastLookaheadT)), 1,1.5);
-        return look;
+        return Math.abs(look);
     }
 
     @Override

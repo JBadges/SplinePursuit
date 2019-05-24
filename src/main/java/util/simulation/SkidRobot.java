@@ -6,12 +6,9 @@ import util.poofs.Util;
 
 public class SkidRobot {
 
-    private static SkidRobot instance = null;
+    private static SkidRobot instance = new SkidRobot(0.7363,3,45);
 
     public static SkidRobot getInstance(){
-        if(instance == null) {
-            instance = new SkidRobot(1,3,6,20);
-        }
         return instance;
     }
 
@@ -35,9 +32,9 @@ public class SkidRobot {
     // Torque constant
     private double Kt = (numMotors * stallTorque) / stallCurrent;
     // Gear ratio
-    private double kG = 10.71;
+    private double kG = 12;
     // Radius of pulley
-    private double kr = 0.065786 / 2.0;
+    private double kr = 0.035786 / 2.0;
 
     public static double speedModifier = 1;
 
@@ -50,11 +47,9 @@ public class SkidRobot {
     private double mass;
     //In m
     private double robotWheelDistance;
-    private double wheelRadius;
 
-    public SkidRobot(double wheelDistance, double wheelRadius, double numberOfMotors, double robotMass) {
+    public SkidRobot(double wheelDistance, double numberOfMotors, double robotMass) {
         this.robotWheelDistance = wheelDistance;
-        this.wheelRadius = wheelRadius;
         this.numMotors = numberOfMotors;
         this.mass = robotMass;
     }
@@ -119,10 +114,6 @@ public class SkidRobot {
 
     public double getMass() {
         return mass;
-    }
-
-    public double getWheelRadius() {
-        return wheelRadius;
     }
 
     public double getWheelDistance() {

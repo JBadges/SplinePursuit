@@ -16,8 +16,8 @@ public class Logger {
 //             writer.print(new Date().toString());
 
              if (data != null) {
-                 writer.print(", ");
                  writer.print(data);
+                 writer.print(", ");
              }
 
              writer.println();

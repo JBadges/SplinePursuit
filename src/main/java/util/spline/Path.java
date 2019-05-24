@@ -18,10 +18,10 @@ public class Path {
 	 * Doesn't run optimizations
 	 * @param path
 	 */
-//	public Path(List<QuinticHermiteSpline> path) {
-//		this.path = path;
-//		generateDistanceWaypoints();
-//	}
+	public Path(List<QuinticHermiteSpline> path) {
+		this.path = path;
+		generateDistanceWaypoints();
+	}
 
 	/**
 	 * Runs optimizations
@@ -85,10 +85,19 @@ public class Path {
 		return path.get((int) t).getDCurvature(t % 1);
 	}
 
+	public double getHeading(double t) {
+		if(t < 0) {
+			return path.get(0).getHeading(0);
+		}
+		if(t >= path.size()) {
+			return path.get(path.size()-1).getHeading(1);
+		}
+		return path.get((int) t).getHeading(t % 1);
+	}
+
 	public List<QuinticHermiteSpline> getPath() {
 		return path;
 	}
-
 
 	public Spline get(int i) {
 		if(i >= path.size()) {
