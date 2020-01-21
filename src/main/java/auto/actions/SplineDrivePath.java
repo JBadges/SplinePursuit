@@ -127,12 +127,12 @@ public class SplineDrivePath implements Action {
         voltages[0] = throttle - (last ? addedConst : curve);
         voltages[1] = throttle + (last ? addedConst : curve);
 
+        // When going backwards the left and right drives are essentially swapped
+        // we dont need to invert voltage because the x error will be negative
         if(isBackwards) {
             double temp = voltages[0];
             voltages[0] = voltages[1];
             voltages[1] = temp;
-            voltages[0] *= 1;
-            voltages[1] *= 1;
         }
 
         voltages = Util.absLimitWithRatio(voltages, 1);

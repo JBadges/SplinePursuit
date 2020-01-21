@@ -65,7 +65,7 @@ public class Path {
 		return path.get((int) i).getPoint(i % 1);
 	}
 
-	public double  getCurvature(double t) {
+	public double getCurvature(double t) {
 		if(t < 0) {
 			return path.get(0).getCurvature(0);
 		}
